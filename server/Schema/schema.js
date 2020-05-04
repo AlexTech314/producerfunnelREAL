@@ -1,6 +1,6 @@
 const graphql = require('graphql');
 
-const { GraphQLSchema, GraphQLObjectType, GraphQLString, GraphQLBoolean, GraphQLID } = graphql;
+const { GraphQLSchema, GraphQLObjectType, GraphQLString, GraphQLBoolean, GraphQLID, GraphQLList } = graphql;
 
 
 //dummy data
@@ -41,16 +41,12 @@ const UserType = new GraphQLObjectType({
 const RootQuery = new GraphQLObjectType({
     name:'RootQueryType',
     fields: {
+        
         user: {
             type: UserType,
             args: {id: {type: GraphQLID} },
-
-
-            
             resolve(parent, args) {
-
                 async function searchTestUsers(args) {
-
                     for (i=0; i < testUsers.length; i++) {
                         if (testUsers[i].id == args.id) {
                             console.log("inside if");
@@ -61,18 +57,18 @@ const RootQuery = new GraphQLObjectType({
                }
                 //code to get data from db/ other source
                 console.log(args.id);
-
-              
-
                console.log(searchTestUsers(args));
-
-               // console.log("not rlly sure how this works", element);
-            
-              //   console.log(_.find(testUsers, {id: args.id}));
-             // return _.find(testUsers, {id: args.id});
                return searchTestUsers(args);
              
-            }
+            },
+
+        // allUsers: {
+        //     type: new GraphQLList(UserType),
+        //     resolve(parent, args) {
+        //         console.log("in users resolve");
+        //         return allUsers;
+        //         }
+        //     }
         }
     }
 });
