@@ -1,6 +1,6 @@
 const graphql = require('graphql');
 
-const { GraphQLSchema, GraphQLObjectType, GraphQLString, GraphQLBoolean } = graphql;
+const { GraphQLSchema, GraphQLObjectType, GraphQLString, GraphQLBoolean, GraphQLID } = graphql;
 
 
 //dummy data
@@ -30,7 +30,7 @@ var testUsers = [
 const UserType = new GraphQLObjectType({
     name: 'user',
     fields: () => ({
-        id: {type: GraphQLString},
+        id: {type: GraphQLID},
         firstname: {type: GraphQLString},
         lastname: {type: GraphQLString},
         email: {type: GraphQLString},
@@ -43,7 +43,7 @@ const RootQuery = new GraphQLObjectType({
     fields: {
         user: {
             type: UserType,
-            args: {id: {type: GraphQLString} },
+            args: {id: {type: GraphQLID} },
 
 
             
