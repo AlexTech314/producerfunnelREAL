@@ -47,9 +47,6 @@ const UserType = new GraphQLObjectType({
 const RootQuery = new GraphQLObjectType({
     name:'RootQueryType',
     fields: {
-        
-       
-
         allUsers: {
             type: new GraphQLList(UserType),
             resolve() {
@@ -91,6 +88,34 @@ const RootQuery = new GraphQLObjectType({
     }
 });
 
+const Mutation = new GraphQLObjectType({
+    name: "Mutation",
+    fields: {
+        addUser: {
+            type: UserType,
+            args: {
+                firstname: { type: GraphQLString},
+                lastname: { type: GraphQLString},
+                email: { type: GraphQLString},
+            },
+
+            resolve(parents, args) {
+                console.log(args);
+                console.log("in mutation resolve");
+                let user = new User({
+                    firstname: args.firstname,
+                    lastname: args.lastname,
+                    email: args.email,
+                    sold: false,
+                });
+
+                return user.save();
+            }
+        }
+    }
+})
+
 module.exports = new GraphQLSchema({
-    query: RootQuery
+    query: RootQuery,
+    mutation: Mutation
 });
