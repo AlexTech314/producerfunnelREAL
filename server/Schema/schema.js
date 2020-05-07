@@ -5,7 +5,8 @@ const {
     GraphQLString, 
     GraphQLBoolean, 
     GraphQLID, 
-    GraphQLList } = graphql;
+    GraphQLList,
+    GraphQLNonNull } = graphql;
 
 const User = require('../models/User');
 
@@ -50,18 +51,18 @@ const RootQuery = new GraphQLObjectType({
         allUsers: {
             type: new GraphQLList(UserType),
             resolve() {
-                let users = [];
-                async function iterateThroughAllUsers() {
-                    for (i=0; i < testUsers.length; i++) {
-                        users.push(testUsers[i]);
-                    }
+                // let users = [];
+                // async function iterateThroughAllUsers() {
+                //     for (i=0; i < testUsers.length; i++) {
+                //         users.push(testUsers[i]);
+                //     }
 
-                    console.log(users);
-                    return users;
-                }
+                //     console.log(users);
+                //     return users;
+                // }
 
                 console.log("in users resolve");
-                return iterateThroughAllUsers();
+                return User.find({});
                 }
             },
 
@@ -69,19 +70,19 @@ const RootQuery = new GraphQLObjectType({
                 type: UserType,
                 args: {id: {type: GraphQLID} },
                 resolve(parent, args) {
-                    async function searchTestUsers(args) {
-                        for (i=0; i < testUsers.length; i++) {
-                            if (testUsers[i].id == args.id) {
-                                console.log("inside if");
-                                console.log(testUsers[i]);
-                                return testUsers[i];
-                            }
-                        }
-                   }
+                //     async function searchTestUsers(args) {
+                //         for (i=0; i < testUsers.length; i++) {
+                //             if (testUsers[i].id == args.id) {
+                //                 console.log("inside if");
+                //                 console.log(testUsers[i]);
+                //                 return testUsers[i];
+                //             }
+                //         }
+                //    }
                     //code to get data from db/ other source
                     console.log(args.id);
-                   console.log(searchTestUsers(args));
-                   return searchTestUsers(args);
+                  // console.log(searchTestUsers(args));
+                   return User.findById(args.id);
                  
                 },
         }
@@ -94,9 +95,9 @@ const Mutation = new GraphQLObjectType({
         addUser: {
             type: UserType,
             args: {
-                firstname: { type: GraphQLString},
-                lastname: { type: GraphQLString},
-                email: { type: GraphQLString},
+                firstname: { type: new GraphQLNonNull(GraphQLString) },
+                lastname: { type: new GraphQLNonNull(GraphQLString)},
+                email: { type: new GraphQLNonNull(GraphQLString)},
             },
 
             resolve(parents, args) {
