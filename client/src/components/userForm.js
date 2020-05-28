@@ -45,7 +45,15 @@ class userForm extends Component {
         e.preventDefault();
         console.log("suck me");
         console.log(this.state);
-    
+
+        let fetchData = {
+            method: 'POST',
+            body: JSON.stringify({email: this.state.email, js: true}),
+            headers: {"Content-Type": "application/json"}
+        }
+        
+        console.log(fetch('https://localhost:4000/subscribe'))
+            
         this.props.addUserMutation({
             variables: {
                 firstname: this.state.firstname,
@@ -54,7 +62,11 @@ class userForm extends Component {
             }
         });
 
-
+        this.setState(  {
+            firstname: '',
+            lastname: '',
+            email: '',
+        })
 
 
     }
@@ -69,7 +81,7 @@ class userForm extends Component {
                 <input id="lastname-submit" type="text" value={this.state.lastname} onChange={this.onChangeLastname} />
                 <br />
                 <label>EMAIL:</label>
-                <input id="email-submit" type="text" value={this.state.email} onChange={this.onChangeEmail} />
+                <input id="email-submit" type="email" value={this.state.email} required pattern = "[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" onChange={this.onChangeEmail} />
                 <br />
                 <input id="getbeats-submit" type="submit" />
             </form>

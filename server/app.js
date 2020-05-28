@@ -4,6 +4,8 @@ const schema = require('./Schema/schema');
 const cors = require('cors');
 const bodyparser = require('body-parser');
 const mongoose = require('mongoose');
+const request = require('request');
+const path = require('path');
 
 require('dotenv').config();
 
@@ -12,7 +14,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(bodyparser.json());
-app.use(bodyparser.urlencoded());
+app.use(bodyparser.urlencoded({extended: false}));
+app.use(express.static(path.join(__dirname, 'public')));
+
+// mailchimp integration
+
+app.post('/subscribe', (req, res) => {
+    console.log("anxiety from coding")
+})
+
+const PORT = process.env.PORT || 4000;
 
 // mongo setup
 const uri = process.env.ATLAS_URI; 
@@ -31,6 +42,6 @@ app.use('/graphql', graphqlHTTP({
     graphiql: true
 }));
 
-app.listen(4000, () => {
-    console.log('Listening for requests on port 4000');
+app.listen(PORT, () => {
+    console.log(`Listening for requests on port ${PORT}`);
 });
